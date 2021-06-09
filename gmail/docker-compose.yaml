@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  worker:
+    working_dir: /usr/src/app
+    image: gmail:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./src:/usr/src/app
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./data:/data/db
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
